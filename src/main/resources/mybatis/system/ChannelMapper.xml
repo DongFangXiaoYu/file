@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.channel.mapper.ChannelMapper">
+    
+    <resultMap type="Channel" id="ChannelResult">
+        <result property="id"    column="id"    />
+        <result property="channelCode"    column="channel_code"    />
+        <result property="name"    column="name"    />
+        <result property="showFile"    column="show_file"    />
+    </resultMap>
+	
+	<sql id="selectChannelVo">
+        select id, `name`, show_file,channel_Code from channel
+    </sql>
+	
+    <select id="selectChannelList" parameterType="Channel" resultMap="ChannelResult">
+        <include refid="selectChannelVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="channelCode != null "> and channelCode = #{channelCode}</if>
+             <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="showFile != null  and showFile != '' "> and show_file = #{showFile}</if>
+         </where>
+    </select>
+    
+    <select id="selectChannelById" parameterType="Long" resultMap="ChannelResult">
+        <include refid="selectChannelVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertChannel" parameterType="Channel">
+        insert into channel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="name != null  and name != ''  ">name,</if>
+            <if test="channelCode != null ">  channel_Code, </if>
+			<if test="showFile != null  and showFile != ''  ">show_file,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+            <if test="channelCode != null  and channelCode != ''  ">#{channelCode},</if>
+			<if test="showFile != null  and showFile != ''  ">#{showFile},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateChannel" parameterType="Channel">
+        update channel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="showFile != null  and showFile != ''  ">show_file = #{showFile},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteChannelById" parameterType="Long">
+        delete from channel where id = #{id}
+    </delete>
+	
+    <delete id="deleteChannelByIds" parameterType="String">
+        delete from channel where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

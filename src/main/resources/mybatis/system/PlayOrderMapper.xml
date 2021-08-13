@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.files.mapper.PlayOrderMapper">
+    
+    <resultMap type="PlaysOrder" id="PlaysOrderResult">
+        <result property="id"    column="id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="types"    column="types"    />
+        <result property="ur"    column="ur"    />
+        <result property="content"    column="content"    />
+        <result property="orderBy"    column="order_by"    />
+        <result property="remark"    column="remark"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="suffix"    column="suffix"    />
+    </resultMap>
+	
+	<sql id="selectOrderVo">
+        select id, file_Name, types, ur, content, order_by, remark,channel_id,suffix from plays_order
+    </sql>
+	
+    <select id="selectOrderList" parameterType="PlaysOrder" resultMap="PlaysOrderResult">
+        <include refid="selectOrderVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="fileName != null  and fileName != '' "> and file_Name = #{fileName}</if>
+             <if test="types != null "> and types = #{types}</if>
+             <if test="ur != null  and ur != '' "> and ur = #{ur}</if>
+             <if test="content != null  and content != '' "> and content = #{content}</if>
+             <if test="orderBy != null "> and order_by = #{orderBy}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+            <if test="channelId != null  and channelId != '' "> and channel_id = #{channelId}</if>
+            <if test="suffix != null  and suffix != '' "> and suffix = #{suffix}</if>
+         </where>
+         order by order_by
+    </select>
+    
+    <select id="selectOrderById" parameterType="Long" resultMap="PlaysOrderResult">
+        <include refid="selectOrderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOrder" parameterType="PlaysOrder">
+        insert into plays_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="fileName != null  and fileName != ''  ">file_Name,</if>
+			<if test="types != null  ">types,</if>
+			<if test="ur != null  and ur != ''  ">ur,</if>
+			<if test="content != null  and content != ''  ">content,</if>
+			<if test="orderBy != null  ">order_by,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+            <if test="channelId != null  and channelId != ''  ">channel_id,</if>
+            <if test="suffix != null  and suffix != ''  ">suffix,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="fileName != null  and fileName != ''  ">#{fileName},</if>
+			<if test="types != null  ">#{types},</if>
+			<if test="ur != null  and ur != ''  ">#{ur},</if>
+			<if test="content != null  and content != ''  ">#{content},</if>
+			<if test="orderBy != null  ">#{orderBy},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+            <if test="channelId != null  and channelId != ''  ">#{channelId},</if>
+            <if test="suffix != null  and suffix != ''  ">#{suffix},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOrder" parameterType="PlaysOrder">
+        update plays_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''  ">file_Name = #{fileName},</if>
+            <if test="types != null  ">types = #{types},</if>
+            <if test="ur != null  and ur != ''  ">ur = #{ur},</if>
+            <if test="content != null  and content != ''  ">content = #{content},</if>
+            <if test="orderBy != null  ">order_by = #{orderBy},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="channelId != null  and channelId != ''  ">channel_id = #{channelId},</if>
+            <if test="suffix != null  and suffix != ''  ">channel_id = #{suffix},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteOrderById" parameterType="Long">
+        delete from plays_order where id = #{id}
+    </delete>
+	
+    <delete id="deleteOrderByIds" parameterType="String">
+        delete from plays_order where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
